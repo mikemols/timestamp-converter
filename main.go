@@ -35,12 +35,30 @@ func convertTimestamp(input string) (string, error) {
 }
 
 func main() {
-	copyFlag := flag.Bool("copy", false, "Copy output to clipboard")
-	flag.Parse()
+	var (
+		timestamp string
+		copyToCb  bool
+	)
+
+	for _, arg := range os.Args[1:] {
+		if arg == "-copy" || arg == "-c" || arg == "--copy" {
+			copyToCb = true
+		} else {
+			timestamp = arg
+		}
+	}
 
 	// Check for required args
-	if flag.NArg() < 1 {
-		fmt.Println("Usage: timestamp-converter [timestamp] [-copy]")
+	if timestamp == "" {
+		fmt.Println(`Usage:
+  timestamp-converter <timestamp> [options]
+
+Arguments:
+  <timestamp>         Unix timestamp (10 or 13 digits)
+
+Options:
+  -c, -copy, --copy   Copy the converted time to clipboard
+`)
 		os.Exit(1)
 	}
 
@@ -54,7 +72,7 @@ func main() {
 
 	fmt.Println(result)
 
-	if *copyFlag {
+	if copyToCb {
 		err := clipboard.WriteAll(result)
 		if err != nil {
 			fmt.Printf("⚠️  Failed to copy to clipboard: %v\n", err)
