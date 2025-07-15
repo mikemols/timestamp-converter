@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"strconv"
@@ -62,9 +61,7 @@ Options:
 		os.Exit(1)
 	}
 
-	input := flag.Arg(0)
-
-	result, err := convertTimestamp(input)
+	result, err := convertTimestamp(timestamp)
 	if err != nil {
 		fmt.Printf("❌ Error: %v\n", err)
 		os.Exit(1)
